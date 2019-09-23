@@ -1,0 +1,70 @@
+# =============================================================================
+# conda install -c conda-forge blpapi
+#
+# https://matthewgilbert.github.io/pdblp/tutorial.html
+# =============================================================================
+
+import pdblp
+from datetime import datetime,timedelta,date
+import time
+import pandas as pd 
+import numpy as np 
+import seaborn as sns
+import statsmodels.formula.api as smf
+import matplotlib.pyplot as plt
+
+# =============================================================================
+# Generate a connection with bloomberg
+# =============================================================================
+con = pdblp.BCon(debug=True, port=8194, timeout=5000)
+con.start()
+con.debug = False
+# =============================================================================
+# Current date of the computer
+# =============================================================================
+timen = str(datetime.now())
+time_f = timen.replace("-","")
+today = time_f[:8]
+# =============================================================================
+# computate the date minus - k - periods
+# =============================================================================
+timei = timedelta(days=1000)
+timei_i = str(datetime.now()-timei) 
+yesterday_i = timei_i.replace("-","")
+finicial = str(yesterday_i[:8])
+# =============================================================================
+# create a list of tickets for request in bloomberg
+# =============================================================================
+tickets = ['ECOPETL CB Equity','BCOLO CB Equity','COLCAP Index']
+information = ['PX_Last']
+df = con.bdh(tickets, information,finicial,today) 
+# =============================================================================
+# The previous code show how you can download data the discretionary form.
+# But in this moment the main goal is dowload data automatically in an function.
+# =============================================================================
+#==============================================================================
+# =============================================================================
+# request data from bloomberg into a function
+# =============================================================================
+def BajarPreciosBloomberg(tickets,information,Inicial=1095):
+    time = str(datetime.now())
+    time_f = time.replace("-","")
+    today = time_f[:8]
+    timei = timedelta(days=Inicial)
+    timei_i = str(datetime.now()-timei) 
+    yesterday_i = timei_i.replace("-","")
+    finicial = str(yesterday_i[:8])    
+    DataFrame = con.bdh(tickets, information ,finicial , today)
+    return DataFrame
+
+# =============================================================================
+# Short example
+# =============================================================================
+
+tickets = ['ECOPETL CB Equity','BCOLO CB Equity','COLCAP Index']
+information = ['PX_Last']
+df = BajarPreciosBloomberg(tickets,information,Inicial=1095)
+  
+
+
+
