@@ -60,6 +60,20 @@ def BajarPreciosBloomberg(tickets,information,Inicial=1095):
 # =============================================================================
 # Short example
 # =============================================================================
+con = pdblp.BCon(debug=True, port=8194, timeout=5000)
+con.start()
+con.debug = False
+
+def BajarPreciosBloomberg(tickets,information,Inicial=1095):
+    time = str(datetime.now())
+    time_f = time.replace("-","")
+    today = time_f[:8]
+    timei = timedelta(days=Inicial)
+    timei_i = str(datetime.now()-timei) 
+    yesterday_i = timei_i.replace("-","")
+    finicial = str(yesterday_i[:8])    
+    DataFrame = con.bdh(tickets, information ,finicial , today)
+    return DataFrame
 
 tickets = ['ECOPETL CB Equity','BCOLO CB Equity','COLCAP Index']
 information = ['PX_Last']
